@@ -17,7 +17,7 @@ from sqlalchemy.exc import (
 )
 from werkzeug.routing import BuildError
 
-from flask_bcrypt import Bcrypt,generate_password_hash, check_password_hash
+from flask_bcrypt import Bcrypt, generate_password_hash, check_password_hash
 
 from flask_login import (
     UserMixin,
@@ -28,25 +28,44 @@ from flask_login import (
     login_required,
 )
 
-from main import create_app,db,login_manager,bcrypt
+from main import create_app, db, login_manager, bcrypt
 from models import User
-from forms import login_form,register_form
+from forms import login_form, register_form, import_form
+import pandas as pd
 
 
 @login_manager.user_loader
 def load_user(user_id):
     return User.query.get(int(user_id))
 
+
 app = create_app()
+
 
 @app.before_request
 def session_handler():
     session.permanent = True
     app.permanent_session_lifetime = timedelta(minutes=1)
 
+
 @app.route("/", methods=("GET", "POST"), strict_slashes=False)
 def index():
-    return render_template("index.html",title="Home")
+    return render_template("index.html", title="Home")
+
+@app.route("/import", methods=("GET", "POST"), strict_slashes=False)
+def importar():
+    form = import_form()
+
+    if form.validate_on_submit():
+        try:
+            filename = form.file.data
+            dados = pd.read_excel(filename)
+            dados.to_sql(name='produtos',con=db.session)
+            return redirect(url_for('produtos'))
+        except Exception as e:
+            flash(e, "danger")    
+    return render_template("import.html", title="Import")
+
 
 @app.route("/login/", methods=("GET", "POST"), strict_slashes=False)
 def login():
@@ -60,17 +79,21 @@ def login():
                 return redirect(url_for('index'))
             else:
                 flash("Invalid Username or password!", "danger")
+        except AttributeError:
+            flash(f"Invalid username or password!", "danger")
         except Exception as e:
             flash(e, "danger")
 
     return render_template("auth.html",
-        form=form,
-        text="Login",
-        title="Login",
-        btn_action="Login"
-        )
+                           form=form,
+                           text="Login",
+                           title="Login",
+                           btn_action="Login"
+                           )
 
 # Register route
+
+
 @app.route("/register/", methods=("GET", "POST"), strict_slashes=False)
 def register():
     form = register_form()
@@ -79,13 +102,13 @@ def register():
             email = form.email.data
             pwd = form.pwd.data
             username = form.username.data
-            
+
             newuser = User(
                 username=username,
                 email=email,
                 pwd=bcrypt.generate_password_hash(pwd),
             )
-    
+
             db.session.add(newuser)
             db.session.commit()
             flash(f"Account Succesfully created", "success")
@@ -110,17 +133,19 @@ def register():
             db.session.rollback()
             flash(f"An error occured !", "danger")
     return render_template("auth.html",
-        form=form,
-        text="Create account",
-        title="Register",
-        btn_action="Register account"
-        )
+                           form=form,
+                           text="Create account",
+                           title="Register",
+                           btn_action="Register account"
+                           )
+
 
 @app.route("/logout")
 @login_required
 def logout():
     logout_user()
     return redirect(url_for('login'))
+
 
 if __name__ == "__main__":
     app.run(debug=True)

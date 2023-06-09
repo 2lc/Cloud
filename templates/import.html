@@ -7,9 +7,12 @@
 
     {% if current_user.is_authenticated %}
 
-    <h1>Welcome {{ current_user.username }}</h1>
-    <a class="btn btn-primary" href="{{url_for('logout')}}">Logout</a>
-    <a class="btn btn-primary" href="{{url_for('importar')}}">Import</a>
+    <h1>Informe o caminho do arquivo</h1>
+    <div class="form-group mb-3">
+        {{ form.import(class_="form-control",placeholder="File name")}}
+    </div>
+    <a class="btn btn-primary" href="{{url_for('imortar')}}">Importar</a>
+
     {% else %}
 
     <a class="btn btn-primary" href="{{url_for('login')}}">Sign in / Sign Up</a>
