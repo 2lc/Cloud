@@ -14,7 +14,6 @@ from flask_login import current_user
 from wtforms import ValidationError,validators
 from models import User
 
-
 class login_form(FlaskForm):
     email = StringField(validators=[InputRequired(), Email(), Length(1, 64)])
     pwd = PasswordField(validators=[InputRequired(), Length(min=8, max=72)])
@@ -22,7 +21,6 @@ class login_form(FlaskForm):
     username = StringField(
         validators=[Optional()]
     )
-
 
 class register_form(FlaskForm):
     username = StringField(
@@ -45,7 +43,6 @@ class register_form(FlaskForm):
             EqualTo("pwd", message="Passwords must match !"),
         ]
     )
-
 
     def validate_email(self, email):
         if User.query.filter_by(email=email.data).first():

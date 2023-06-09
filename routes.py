@@ -48,7 +48,6 @@ def session_handler():
 def index():
     return render_template("index.html",title="Home")
 
-
 @app.route("/login/", methods=("GET", "POST"), strict_slashes=False)
 def login():
     form = login_form()
@@ -70,8 +69,6 @@ def login():
         title="Login",
         btn_action="Login"
         )
-
-
 
 # Register route
 @app.route("/register/", methods=("GET", "POST"), strict_slashes=False)
@@ -124,7 +121,6 @@ def register():
 def logout():
     logout_user()
     return redirect(url_for('login'))
-
 
 if __name__ == "__main__":
     app.run(debug=True)

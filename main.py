@@ -21,7 +21,6 @@ db = SQLAlchemy()
 migrate = Migrate()
 bcrypt = Bcrypt()
 
-
 def create_app():
     app = Flask(__name__)
 
