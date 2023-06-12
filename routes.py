@@ -31,13 +31,12 @@ from flask_login import (
 from main import create_app, db, login_manager, bcrypt
 from models import User
 from forms import login_form, register_form, import_form
-import pandas as pd
+import pandas
 
 
 @login_manager.user_loader
 def load_user(user_id):
-    return User.query.get(int(user_id))
-
+    return User.query.filter_by(id=int(user_id)).first()
 
 app = create_app()
 
@@ -45,27 +44,49 @@ app = create_app()
 @app.before_request
 def session_handler():
     session.permanent = True
-    app.permanent_session_lifetime = timedelta(minutes=1)
+    app.permanent_session_lifetime = timedelta(minutes=5)
 
 
 @app.route("/", methods=("GET", "POST"), strict_slashes=False)
 def index():
     return render_template("index.html", title="Home")
 
-@app.route("/import", methods=("GET", "POST"), strict_slashes=False)
-def importar():
-    form = import_form()
 
-    if form.validate_on_submit():
+@app.route("/importar", methods=("GET", "POST"), strict_slashes=False)
+def importar():
+    form1 = import_form()
+
+    if form1.validate_on_submit():
         try:
-            filename = form.file.data
-            dados = pd.read_excel(filename)
-            dados.to_sql(name='produtos',con=db.session)
+            filename = form1.file.data
+            dados = pandas.read_excel("c:/temp/prd.xlsx", engine="openpyxl")
+            dados.to_sql(name='produtos', con=db.engine, index=True, index_label='id', if_exists='replace')
+            db.session.commit()
             return redirect(url_for('produtos'))
         except Exception as e:
-            flash(e, "danger")    
-    return render_template("import.html", title="Import")
+            print(e, "Perigo")
+    return render_template("import.html", form1=form1,
+                           text="Importar",
+                           title="Importar",
+                           btn_action="Importar")
 
+
+@app.route("/produtos", methods=("GET", "POST"), strict_slashes=False)
+def produtos():
+    try:
+        # prod = db.session.query(produtos).all()
+        produtos = pandas.read_sql_table('produtos', con=db.engine)
+        #print(produtos)
+        table1 = produtos.to_html(index=False, justify='left', decimal=',',
+                         classes='table table-bordered table-sm small')
+        # return redirect(url_for('produtos'))
+        return render_template("produtos.html", table1=table1,
+                               text="Produtos",
+                               title="Produtos",
+                               btn_action="Home")
+    except Exception as e:
+        print(e, "Erro")
+    return render_template("index.html", title="Home")
 
 @app.route("/login/", methods=("GET", "POST"), strict_slashes=False)
 def login():

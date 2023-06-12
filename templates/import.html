@@ -3,20 +3,22 @@
 {% block content%}
 
 <div class="container py-4 text-center">
+    <form action="{{ request.path }}" method="POST" class="card-body">
+        {{ form1.csrf_token }}
 
+        {% if current_user.is_authenticated %}
 
-    {% if current_user.is_authenticated %}
+        <h2>Informe o caminho do arquivo</h2>
+        <div class="form-group mb-3 col-lg-5">
+            {{ form1.file(class_="form-control",placeholder="File name")}}
+        </div>
+        <button type="submit" class="btn btn-primary mt-3"> {{ btn_action }} </button>
+        
+        {% else %}
 
-    <h1>Informe o caminho do arquivo</h1>
-    <div class="form-group mb-3">
-        {{ form.import(class_="form-control",placeholder="File name")}}
-    </div>
-    <a class="btn btn-primary" href="{{url_for('imortar')}}">Importar</a>
+        <a class="btn btn-primary" href="{{url_for('login')}}">Sign in / Sign Up</a>
 
-    {% else %}
-
-    <a class="btn btn-primary" href="{{url_for('login')}}">Sign in / Sign Up</a>
-
-    {% endif %}
+        {% endif %}
+    </form>
 </div>
 {% endblock %}
