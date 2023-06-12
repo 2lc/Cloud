@@ -59,7 +59,7 @@ def importar():
     if form1.validate_on_submit():
         try:
             filename = form1.file.data
-            dados = pandas.read_excel("c:/temp/prd.xlsx", engine="openpyxl")
+            dados = pandas.read_excel("prd.xlsx", engine="openpyxl")
             dados.to_sql(name='produtos', con=db.engine, index=True, index_label='id', if_exists='replace')
             db.session.commit()
             return redirect(url_for('produtos'))
