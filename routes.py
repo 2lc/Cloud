@@ -38,6 +38,7 @@ import pandas
 def load_user(user_id):
     return User.query.filter_by(id=int(user_id)).first()
 
+
 app = create_app()
 
 
@@ -60,7 +61,8 @@ def importar():
         try:
             filename = form1.file.data
             dados = pandas.read_excel("prd.xlsx", engine="openpyxl")
-            dados.to_sql(name='produtos', con=db.engine, index=True, index_label='id', if_exists='replace')
+            dados.to_sql(name='produtos', con=db.engine, index=True,
+                         index_label='id', if_exists='replace')
             db.session.commit()
             return redirect(url_for('produtos'))
         except Exception as e:
@@ -76,9 +78,9 @@ def produtos():
     try:
         # prod = db.session.query(produtos).all()
         produtos = pandas.read_sql_table('produtos', con=db.engine)
-        #print(produtos)
+        # print(produtos)
         table1 = produtos.to_html(index=False, justify='left', decimal=',',
-                         classes='table table-bordered table-sm small')
+                                  classes='table table-bordered table-sm small')
         # return redirect(url_for('produtos'))
         return render_template("produtos.html", table1=table1,
                                text="Produtos",
@@ -87,6 +89,7 @@ def produtos():
     except Exception as e:
         print(e, "Erro")
     return render_template("index.html", title="Home")
+
 
 @app.route("/login/", methods=("GET", "POST"), strict_slashes=False)
 def login():
@@ -155,9 +158,9 @@ def register():
             flash(f"An error occured !", "danger")
     return render_template("auth.html",
                            form=form,
-                           text="Create account",
+                           text="Criar conta",
                            title="Register",
-                           btn_action="Register account"
+                           btn_action="Cadastrar conta"
                            )
 
 

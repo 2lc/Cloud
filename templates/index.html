@@ -2,18 +2,37 @@
 {% block title%} {{ title }} {% endblock %}
 {% block content%}
 
-<div class="container py-4 text-center">
-
-
-    {% if current_user.is_authenticated %}
-
-    <h1>Welcome {{ current_user.username }}</h1>
-    <a class="btn btn-primary" href="{{url_for('logout')}}">Logout</a>
-    <a class="btn btn-primary" href="{{url_for('importar')}}">Import</a>
-    {% else %}
-
-    <a class="btn btn-primary" href="{{url_for('login')}}">Sign in / Sign Up</a>
-
-    {% endif %}
+<div class="container py-1">
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+        <div class="text-center mt-2">
+            <h5>&nbsp;<svg xmlns="http://www.w3.org/2000/svg" width="34" height="34" fill="Navy" class="bi bi-upc-scan"
+                    viewBox="0 0 16 16">
+                    <path
+                        d="M1.5 1a.5.5 0 0 0-.5.5v3a.5.5 0 0 1-1 0v-3A1.5 1.5 0 0 1 1.5 0h3a.5.5 0 0 1 0 1h-3zM11 .5a.5.5 0 0 1 .5-.5h3A1.5 1.5 0 0 1 16 1.5v3a.5.5 0 0 1-1 0v-3a.5.5 0 0 0-.5-.5h-3a.5.5 0 0 1-.5-.5zM.5 11a.5.5 0 0 1 .5.5v3a.5.5 0 0 0 .5.5h3a.5.5 0 0 1 0 1h-3A1.5 1.5 0 0 1 0 14.5v-3a.5.5 0 0 1 .5-.5zm15 0a.5.5 0 0 1 .5.5v3a1.5 1.5 0 0 1-1.5 1.5h-3a.5.5 0 0 1 0-1h3a.5.5 0 0 0 .5-.5v-3a.5.5 0 0 1 .5-.5zM3 4.5a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7zm2 0a.5.5 0 0 1 .5-.5h1a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-.5.5h-1a.5.5 0 0 1-.5-.5v-7zm3 0a.5.5 0 0 1 1 0v7a.5.5 0 0 1-1 0v-7z" />
+                </svg>
+                Track scan</h5>
+        </div>
+        <div class="collapse navbar-collapse justify-content-between" id="navbarTogglerDemo01">
+            <ul class="navbar-nav mt-2 mt-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="#">Home <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{{url_for('importar')}}">Importar</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link disabled" href="#">Disabled</a>
+                </li>
+            </ul>
+            <form class="form-inline my-2 my-sm-0">
+                {% if current_user.is_authenticated %}
+                <span>Bem vindo,  {{ current_user.username }}</span>
+                <a class="btn btn-outline-primary border-2" href="{{url_for('logout')}}">Sign out</a>&nbsp;&nbsp;
+                {% else %}
+                <a class="btn btn-outline-primary border-2" href="{{url_for('login')}}">Sign in</a>&nbsp;&nbsp;
+                {% endif %}
+            </form>
+        </div>
+    </nav>
 </div>
 {% endblock %}
