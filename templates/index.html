@@ -2,9 +2,9 @@
 {% block title%} {{ title }} {% endblock %}
 {% block content%}
 {% if current_user.is_authenticated %}
-<div class="container-md py-4 col-4">
-  <h5 class="fw-normal">Página principal</h5></br>
-  <p class="fw-light">Olá, <b>{{ current_user.username }}</b>. Esta é a página inicial do sistema, seja muito bem vindo!</p>
+<div class="container-md border text-center mt-4">
+  <h5 class="fw-normal mb-2">Página principal</h5>
+  <p class="fw-light">Olá, <b>{{ current_user.username }}</b>. Esta é a página inicial do sistema,<br> seja muito bem vindo!</p>
 </div>
 {% else %}
 <meta http-equiv="refresh" content="0; URL='/login'" />
