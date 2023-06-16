@@ -80,7 +80,7 @@ def produtos():
         produtos = pandas.read_sql_table('produtos', con=db.engine)
         # print(produtos)
         table1 = produtos.to_html(index=False, justify='left', decimal=',',
-                                  classes='table table-bordered table-sm small')
+                                  classes='table table-bordered table-hover table-sm small')
         # return redirect(url_for('produtos'))
         return render_template("produtos.html", table1=table1,
                                text="Produtos",

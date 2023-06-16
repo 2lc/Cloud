@@ -8,8 +8,8 @@
 
         {% if current_user.is_authenticated %}
 
-        <h2>Informe o caminho do arquivo</h2>
-        <div class="form-group mb-3 col-lg-5">
+        <h5>Informe o caminho do arquivo</h5>
+        <div class="container" style="max-width: 400px;">
             {{ form1.file(class_="form-control",placeholder="File name")}}
         </div>
         <button type="submit" class="btn bg-info text-white mt-3"> {{ btn_action }} </button>

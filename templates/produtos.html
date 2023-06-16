@@ -2,12 +2,12 @@
 {% block title%} {{ title }} {% endblock %}
 {% block content%}
 
-<div class="container py-4 text-center">
+<div class="container py-4">
 
 
     {% if current_user.is_authenticated %}
 
-    <h2>Tabela de produtos</h2>
+    <h5>Tabela de produtos</h5>
     <div class="form-group mb-3">
         {{ table1 | safe }}
         <a class="btn bg-info text-white mt-3" href="{{url_for('index')}}">{{ btn_action }} </a>
